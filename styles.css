@@ -1,25 +1,28 @@
+/* ---------- base ---------- */
 html, body {
   margin: 0;
-  height: 100%;
+  min-height: 100%;
 }
 
-@keyframes bagPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+body {
+  overflow-x: hidden;
 }
-.bag-pulse { animation: bagPulse 1.8s ease-in-out infinite; }
 
+/* ---------- header ---------- */
 .theme-banner {
   background: linear-gradient(135deg, #fff5f2, #ffe1e6);
   border: 3px solid #c41f36;
+  box-sizing: border-box;
 }
 
+/* ---------- liquid animation ---------- */
 @keyframes bubbleRise {
   0%   { transform: translateY(0) scale(0.6); opacity: 0; }
   12%  { opacity: 0.85; }
   88%  { opacity: 0.5; }
   100% { transform: translateY(-135%) scale(1); opacity: 0; }
 }
+
 .bubble {
   position: absolute;
   bottom: 2px;
@@ -39,6 +42,7 @@ html, body {
   82%  { transform: scaleY(0.995); }
   100% { transform: scaleY(1); }
 }
+
 .splash {
   animation: splashBounce 0.7s cubic-bezier(.36, 1.15, .4, 1);
   transform-origin: bottom center;
@@ -48,6 +52,7 @@ html, body {
   0%, 100% { transform: scaleY(1); }
   50%      { transform: scaleY(1.012); }
 }
+
 .tube-fill {
   transform-origin: bottom center;
   animation: fillIdleBreathe var(--idle-duration, 3.4s) ease-in-out infinite;
@@ -71,7 +76,6 @@ html, body {
   animation-delay: var(--idle-delay, 0s);
 }
 
-/* gentle continuous idle wobble, always running unless a splash is active */
 @keyframes surfaceIdle {
   0%   { transform: translateX(-50%) rotate(0deg) scaleY(1) scaleX(1) translateY(0); }
   20%  { transform: translateX(-50%) rotate(-9deg) scaleY(1.18) scaleX(0.9) translateY(-2.2px); }
@@ -88,18 +92,279 @@ html, body {
   75%  { transform: translateX(-50%) rotate(2deg) scaleY(0.97); }
   100% { transform: translateX(-50%) rotate(0deg) scaleY(1); }
 }
+
 .splash .liquid-surface {
   animation: surfaceSlosh 0.7s ease-out;
 }
 
+/* ---------- dashboard / tubes ---------- */
+#dashboard-root {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+#row {
+  position: relative;
+  width: min(100%, 820px);
+  min-height: 330px;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  align-items: start;
+  justify-items: center;
+  column-gap: 12px;
+  row-gap: 20px;
+}
+
+#pipes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 1;
+}
+
+.tube-wrap {
+  width: 64px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.tube {
+  position: relative;
+  width: 56px;
+  height: 256px;
+  border-radius: 6px 6px 28px 28px;
+  border: 2px solid rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.2);
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+  box-sizing: border-box;
+}
+
+.tube-glass {
+  position: absolute;
+  left: 8px;
+  top: 10px;
+  width: 6px;
+  height: 85%;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.25);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tube-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #d12a41, #7d1120);
+}
+
+.value-badge {
+  margin-top: -2px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: #c41f36;
+  color: white;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 800;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.dept-label {
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: #c41f36;
+  color: white;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+
+/* ---------- background video ---------- */
 .bg-video {
   position: fixed;
   inset: 0;
   z-index: -10;
   width: 100vw;
-  height: 100vh;
   height: 100dvh;
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
   display: block;
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 899px) {
+  #page-shell {
+    padding: 18px;
+  }
+
+  #hub {
+    margin-bottom: -24px;
+    transform: translateY(-24px);
+  }
+
+  .theme-banner {
+    padding: 14px 28px;
+  }
+
+  #dashboard-root {
+    max-width: 650px;
+    padding: 38px 22px 42px;
+  }
+
+  #row {
+    width: min(100%, 570px);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-height: 540px;
+    row-gap: 24px;
+  }
+
+  .tube-wrap {
+    width: 64px;
+  }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 599px) {
+  #page-shell {
+    padding: 14px 8px 28px;
+    justify-content: flex-start;
+    padding-top: 14px;
+  }
+
+  #hub {
+    margin-bottom: -18px;
+    transform: translateY(0);
+    width: 100%;
+  }
+
+  .theme-banner {
+    width: min(100%, 360px);
+    max-width: calc(100vw - 16px);
+    padding: 12px 16px 14px;
+    border-width: 2px;
+    border-radius: 20px;
+  }
+
+  .theme-banner .title-row {
+    gap: 7px;
+  }
+
+  .theme-banner .blood-word {
+    font-size: clamp(1.85rem, 10vw, 2.45rem);
+  }
+
+  .theme-banner .drive-word {
+    font-size: clamp(1.15rem, 6vw, 1.55rem);
+    margin-top: 3px;
+    text-align: center;
+  }
+
+  .theme-banner svg {
+    width: 27px;
+    height: 32px;
+  }
+
+  #dashboard-root {
+    width: min(100%, 430px);
+    max-width: 430px;
+    padding: 30px 8px 34px;
+    border-radius: 18px;
+    margin-top: 0;
+  }
+
+  #row {
+    width: 100%;
+    min-height: 735px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 0;
+    row-gap: 24px;
+    margin-top: 8px;
+  }
+
+  .tube-wrap {
+    width: 62px;
+    gap: 7px;
+  }
+
+  .tube {
+    width: 46px;
+    height: 184px;
+    border-radius: 5px 5px 24px 24px;
+  }
+
+  .tube-glass {
+    left: 6px;
+    top: 8px;
+    width: 5px;
+  }
+
+  .value-badge {
+    padding: 5px 9px;
+    font-size: 12px;
+  }
+
+  .dept-label {
+    padding: 5px 6px;
+    font-size: 10px;
+    border-radius: 5px;
+  }
+
+  .liquid-surface {
+    height: 11px;
+    top: -5.5px;
+  }
+
+  /* Keep the ECG/background artwork visible rather than letting the center
+     crop swallow all of the side artwork on a tall phone viewport. */
+  .bg-video {
+    object-position: 50% 42%;
+  }
+}
+
+/* ---------- very narrow phones ---------- */
+@media (max-width: 370px) {
+  #page-shell {
+    padding-inline: 5px;
+  }
+
+  .theme-banner {
+    padding-inline: 11px;
+  }
+
+  #dashboard-root {
+    padding-inline: 4px;
+  }
+
+  #row {
+    min-height: 690px;
+    row-gap: 18px;
+  }
+
+  .tube-wrap {
+    width: 56px;
+  }
+
+  .tube {
+    width: 42px;
+    height: 168px;
+  }
+
+  .dept-label {
+    font-size: 9px;
+    padding-inline: 5px;
+  }
 }
